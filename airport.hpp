@@ -1,3 +1,8 @@
+//airports.hpp
+
+#ifndef AIRPORT_HPP
+#define AIRPORT_HPP
+
 #define _USE_MATH_DEFINES
 
 #include <iostream>
@@ -6,43 +11,47 @@
 #include <exception>
 #include "csv-parser/single_include/csv.hpp"
 #include "variadic_table/include/VariadicTable.h"
+#include "utilities.hpp"
 
 using namespace std;
 using namespace csv;
 
-class Airport   
+class Airport
 {
 public:
     string name;
     float latitude;
     float longitude;
+    int group;
 
-    void add_airport()
+    void add_airport(string name, float latitude, float longitude, int group = -1)
     {
-        cout << "Enter Airport Name: ";
-        cin >> name;
-        cout << "Enter Latitude: ";
-        cin >> latitude;
-        cout << "Enter Longitude: ";
-        cin >> longitude;
+        this->name = name;
+        this->latitude = latitude;
+        this->longitude = longitude;
+        this->group = group;
     }
 
-    void display(VariadicTable<std::string, double, double>& vt) const 
+    void display(VariadicTable<std::string, double, double>& vt) const
     {
         vt.addRow(name, latitude, longitude);
     }
 };
 
+
 void read_airport_file(vector<Airport>& airports, const string& filename)
 {
     try {
         CSVReader reader(filename);
-        for (CSVRow& row : reader)  
+        for (CSVRow& row : reader)
         {
             Airport airport;
-            airport.name = row["Name"].get<string>();
-            airport.latitude = row["Latitude"].get<float>();
-            airport.longitude = row["Longitude"].get<float>();
+            string n = row["Name"].get<string>();
+            float lat = row["Latitude"].get<float>();
+            float lon = row["Longitude"].get<float>();
+            int group = row["Group"].get<int>();
+
+            airport.add_airport(n, lat, lon, group);
             airports.push_back(airport);
         }
     } catch (const exception& e) {
@@ -50,15 +59,5 @@ void read_airport_file(vector<Airport>& airports, const string& filename)
     }
 }
 
-double haversine_distance(double lat1, double lon1, double lat2, double lon2) {
-    const double earthRad = 6371.0; 
-    double dLat = (lat2 - lat1) * M_PI / 180.0;
-    double dLon = (lon2 - lon1) * M_PI / 180.0;
-    lat1 = lat1 * M_PI / 180.0;
-    lat2 = lat2 * M_PI / 180.0;
 
-    double a = sin(dLat / 2) * sin(dLat / 2) +
-               sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return earthRad * c;
-}
+#endif 
