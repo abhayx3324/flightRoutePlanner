@@ -7,7 +7,7 @@ int main()
     Graph graph;
 
     vector<Airport> airports;
-    read_airport_file(airports, "airport_list.csv");
+    read_airport_file(airports, "alt_airport_list.csv");
 
     graph.create_adjacency_list(airports);
 
@@ -20,6 +20,16 @@ int main()
     graph.display_adjacency_list(airports);
 
     graph.save_adjacency_list(airports, "adj_list.txt");
+
+    string source, destination;
+    cout << "Enter source airport: ";
+    cin >> source;
+    cout << "Enter destination airport: ";
+    cin >> destination;
+
+    double distance = graph.dijkstra(airports, source, destination);
+    if (distance != -1) 
+        cout << "Distance from " << source << " to " << destination << " is " << distance << " km.\n";
 
     return 0;
 }

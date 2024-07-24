@@ -10,6 +10,8 @@
 #include <utility>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
+#include <limits>
 
 using namespace std;
 
@@ -92,6 +94,48 @@ class Graph
                 cout << "(" << airports[index].name << ", " << distance << " ) ";
             cout << endl;
         }
+    }
+
+    double dijkstra(const vector<Airport>& airports, const string& source_name, const string& destination_name) 
+    {
+        int n = airports.size();
+        vector<double> min_distance(n, numeric_limits<double>::infinity());
+        vector<bool> visited(n, false);
+
+        auto compare = [](pair<int, double> a, pair<int, double> b) { return a.second > b.second; };
+        priority_queue<pair<int, double>, vector<pair<int, double>>, decltype(compare)> pq(compare);
+
+        int source_index = find_airport_index(airports, source_name);
+        int destination_index = find_airport_index(airports, destination_name);
+
+        if (source_index == -1 || destination_index == -1) 
+        {
+            cerr << "Invalid source or destination airport name." << endl;
+            return -1;
+        }
+
+        pq.emplace(source_index, 0);
+        min_distance[source_index] = 0;
+
+        while (!pq.empty()) 
+        {
+            int u = pq.top().first;
+            pq.pop();
+
+            if (visited[u]) continue;
+            visited[u] = true;
+
+            for (const auto& [v, weight] : adjacency_list[u]) 
+            {
+                if (!visited[v] && min_distance[u] + weight < min_distance[v]) 
+                {
+                    min_distance[v] = min_distance[u] + weight;
+                    pq.emplace(v, min_distance[v]);
+                }
+            }
+        }
+
+        return min_distance[destination_index];
     }
 };
 

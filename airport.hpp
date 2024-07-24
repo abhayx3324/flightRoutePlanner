@@ -62,5 +62,15 @@ void read_airport_file(vector<Airport>& airports, const string& filename)
     }
 }
 
+int find_airport_index(const vector<Airport>& airports, const string& name) 
+{
+    for (size_t i = 0; i < airports.size(); ++i) 
+    {
+        if (airports[i].name == name)
+            return i;
+    }
+    return -1;
+}
+
 
 #endif 
