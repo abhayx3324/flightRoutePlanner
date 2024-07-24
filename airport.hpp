@@ -22,19 +22,21 @@ public:
     string name;
     float latitude;
     float longitude;
-    int group;
+    int cluster;
+    bool is_main;
 
-    void add_airport(string name, float latitude, float longitude, int group = -1)
+    void add_airport(string name, float latitude, float longitude, int cluster = -1, bool is_main = false)
     {
         this->name = name;
         this->latitude = latitude;
         this->longitude = longitude;
-        this->group = group;
+        this->cluster = cluster;
+        this->is_main = is_main;
     }
 
-    void display(VariadicTable<std::string, double, double>& vt) const
+    void display(VariadicTable<std::string, double, double, int, std::string>& vt) const
     {
-        vt.addRow(name, latitude, longitude);
+        vt.addRow(name, latitude, longitude, cluster, is_main?"Yes":"No");
     }
 };
 
@@ -49,9 +51,10 @@ void read_airport_file(vector<Airport>& airports, const string& filename)
             string n = row["Name"].get<string>();
             float lat = row["Latitude"].get<float>();
             float lon = row["Longitude"].get<float>();
-            int group = row["Group"].get<int>();
+            int group = row["Cluster"].get<int>();
+            bool m = row["IsMain"].get<bool>();
 
-            airport.add_airport(n, lat, lon, group);
+            airport.add_airport(n, lat, lon, group, m);
             airports.push_back(airport);
         }
     } catch (const exception& e) {

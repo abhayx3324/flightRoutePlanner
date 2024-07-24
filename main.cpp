@@ -2,7 +2,8 @@
 
 #include "graph.hpp"
 
-int main() {
+int main() 
+{
     Graph graph;
 
     vector<Airport> airports;
@@ -10,10 +11,9 @@ int main() {
 
     graph.create_adjacency_list(airports);
 
-    VariadicTable<std::string, double, double> vt({"Airport", "Latitude", "Longitude"}, 10);
-    for (const auto& airport : airports) {
+    VariadicTable<std::string, double, double, int, std::string> vt({"Airport", "Latitude", "Longitude", "Cluster", "IsMain"}, 10);
+    for (const auto& airport : airports)
         airport.display(vt);
-    }
     vt.print(cout);
 
     cout << "\nAdjacency List:\n";
