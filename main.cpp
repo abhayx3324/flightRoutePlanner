@@ -7,7 +7,7 @@ int main()
     Graph graph;
 
     vector<Airport> airports;
-    read_airport_file(airports, "alt_airport_list.csv");
+    read_airport_file(airports, "csv_files/airport_list.csv");
 
     graph.create_adjacency_list(airports);
 
@@ -20,6 +20,10 @@ int main()
     graph.display_adjacency_list(airports);
 
     graph.save_adjacency_list(airports, "adj_list.txt");
+
+    //graph.load_adjacency_list("adj_list.txt", airports, graph.adjacency_list);
+
+    graph.display_adjacency_list(airports);
 
     string source, destination;
     cout << "Enter source airport: ";

@@ -1,7 +1,6 @@
 //airports.hpp
 
-#ifndef AIRPORT_HPP
-#define AIRPORT_HPP
+#pragma once
 
 #define _USE_MATH_DEFINES
 
@@ -71,6 +70,3 @@ int find_airport_index(const vector<Airport>& airports, const string& name)
     }
     return -1;
 }
-
-
-#endif 
