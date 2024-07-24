@@ -1,7 +1,3 @@
-Sure, here is a README file for your project:
-
----
-
 # Flight Route Planner
 
 This project is a flight route planner implemented in C++. It uses Dijkstra's algorithm to find the shortest path between airports, considering the effect of wind on travel distance. The planner represents airports using a graph, where the nodes are airports, and the edges are the distances between them.
