@@ -1,6 +1,8 @@
 //main.cpp
 
 #include "graph.hpp"
+#include <algorithm>
+#include <cctype>
 
 int main() 
 {
@@ -11,7 +13,7 @@ int main()
 
     graph.create_adjacency_list(airports);
 
-    VariadicTable<std::string, double, double, int, std::string> vt({"Airport", "Latitude", "Longitude", "Cluster", "IsMain"}, 10);
+    VariadicTable<std::string, double, double, int, std::string, double, double> vt({"Airport", "Latitude", "Longitude", "Cluster", "IsMain", "WindSpeed", "WindDirection"}, 10);
     for (const auto& airport : airports)
         airport.display(vt);
     vt.print(cout);
@@ -21,8 +23,6 @@ int main()
 
     graph.save_adjacency_list(airports, "adj_list.txt");
 
-    //graph.load_adjacency_list("adj_list.txt", airports, graph.adjacency_list);
-
     graph.display_adjacency_list(airports);
 
     string source, destination;
@@ -31,9 +31,12 @@ int main()
     cout << "Enter destination airport: ";
     cin >> destination;
 
+    std::transform(source.begin(), source.end(), source.begin(), ::toupper);
+    std::transform(destination.begin(), destination.end(), destination.begin(), ::toupper);
+
     double distance = graph.dijkstra(airports, source, destination);
     if (distance != -1) 
-        cout << "Distance from " << source << " to " << destination << " is " << distance << " km.\n";
+        cout << "Effective (wind corrected) distance from " << source << " to " << destination << " is " << distance << " km.\n";
 
     return 0;
 }

@@ -24,28 +24,39 @@ class Graph
         size_t n = airports.size();
         adjacency_list.resize(n);
 
-        // Connect airports within the same group
         for (size_t i = 0; i < n; ++i) 
         {
             for (size_t j = i + 1; j < n; ++j) 
             {
                 if (airports[i].cluster == airports[j].cluster) 
                 {
-                    double distance = haversine_distance(
+                    double distance1 = haversine_distance(
                         airports[i].latitude, airports[i].longitude,
                         airports[j].latitude, airports[j].longitude
                     );
-                    adjacency_list[i].emplace_back(j, distance);
-                    adjacency_list[j].emplace_back(i, distance);
+                    double distance2 = haversine_distance(
+                        airports[j].latitude, airports[j].longitude,
+                        airports[i].latitude, airports[i].longitude
+                    );
+                    distance1 = calculate_effective_distance(airports[i], airports[j], distance1);
+                    distance2 = calculate_effective_distance(airports[j], airports[i], distance2);
+                    adjacency_list[i].emplace_back(j, distance1);
+                    adjacency_list[j].emplace_back(i, distance2);
                 }
                 else if (airports[i].is_main && airports[j].is_main) 
                 {
-                    double distance = haversine_distance(
+                    double distance1 = haversine_distance(
                         airports[i].latitude, airports[i].longitude,
                         airports[j].latitude, airports[j].longitude
                     );
-                    adjacency_list[i].emplace_back(j, distance);
-                    adjacency_list[j].emplace_back(i, distance);
+                    double distance2 = haversine_distance(
+                        airports[j].latitude, airports[j].longitude,
+                        airports[i].latitude, airports[i].longitude
+                    );
+                    distance1 = calculate_effective_distance(airports[i], airports[j], distance1);
+                    distance2 = calculate_effective_distance(airports[j], airports[i], distance2);
+                    adjacency_list[i].emplace_back(j, distance1);
+                    adjacency_list[j].emplace_back(i, distance2);
                 }
             }
         }
@@ -125,7 +136,6 @@ class Graph
             }
         }
 
-        // Output the path
         if (min_distance[destination_index] == numeric_limits<double>::infinity())
         {
             cout << "No path found from " << source_name << " to " << destination_name << endl;
