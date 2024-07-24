@@ -23,7 +23,7 @@ int main()
 
     graph.save_adjacency_list(airports, "adj_list.txt");
 
-    graph.display_adjacency_list(airports);
+    //graph.display_adjacency_list(airports);
 
     string source, destination;
     cout << "Enter source airport: ";
